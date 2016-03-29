@@ -12,6 +12,8 @@ LiquidCrystal lcd(4, 5, 6, 7, 8, 9);
 int red = 10;
 int green = 11;
 
+
+
 #define Rows 4
 #define Cols 3
 #define Pin A0
