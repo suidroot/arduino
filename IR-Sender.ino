@@ -4,6 +4,10 @@
  * Version 0.1 July, 2009
  * Copyright 2009 Ken Shirriff
  * http://arcfn.com
+ * NEC: 61A0F00F tv power
+ * NEC: 48B710EF auto sleep
+ * NEC: 48B7609F  auto
+ * NEC: 77E1505B apple tv up
  */
 
 #include <IRremote.h>
@@ -15,12 +19,13 @@ void setup()
   Serial.begin(9600);
 }
 
-void loop() { 
+void loop() {
   if (Serial.read() != -1) {
     for (int i = 0; i < 3; i++) {
-      irsend.sendNEC(0x61A0F00F, 32); // TV Power code
-      delay(40);
+      irsend.sendNEC(0x77E1505B, 32); // Sony TV power code
       Serial.println("send");
+      delay(4000);
+
     }
   }
 }
