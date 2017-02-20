@@ -1,3 +1,16 @@
+/*
+ * Tempurature Humidity and Luminance Sensor outputing to a SPI Screen
+ * 
+ * Components
+ * Adafruit Feather HuzzaH
+ * DHT22
+ * Photo Resistor
+ * 10k Resistor
+ * SSD1306 OLED Display
+ * 
+ */
+
+
 // DHT Libraries
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
