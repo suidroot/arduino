@@ -21,14 +21,14 @@
 
 #include "Adafruit_BLE.h"
 #include "Adafruit_BluefruitLE_SPI.h"
-// #include "Adafruit_BluefruitLE_UART.h"
+#include "Adafruit_BluefruitLE_UART.h"
 
 #define BUFSIZE                        128   // Size of the read buffer for incoming data
 #define VERBOSE_MODE                   true  // If set to 'true' enables debug output
 #define BLE_READPACKET_TIMEOUT         500   // Timeout in ms waiting to read a response
 
 
-// #include "BluefruitConfig.h"
+//#include "BluefruitConfig.h"
 // SHARED SPI SETTINGS
 // ----------------------------------------------------------------------------------------------
 // The following macros declare the pins to use for HW and SW SPI communication.
@@ -59,6 +59,8 @@ MakeItRobotics line_following;//declare object
 #define MODE_LED_BEHAVIOUR          "MODE"
 
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
+
+int currentspeed = 0;
 
 
 // A small helper
@@ -147,7 +149,7 @@ void setup(void)
   //// switch to robot controller
   Serial.begin(10420);                     //tell the Arduino to communicate with Make: it PCB
   delay(500);                              //delay 500ms
-  line_following.line_following_setup();   //initialize the status of line following robot
+  //line_following.line_following_setup();   //initialize the status of line following robot
   line_following.all_stop();               //all motors stop
   ////
 
@@ -161,7 +163,7 @@ void setup(void)
 void loop(void)
 {
 
-   static int action1 = 0;                //now action
+  static int action1 = 0;                //now action
   static int action2 = 0;                //last action
   /* Wait for new data to arrive */
   uint8_t len = readPacket(&ble, BLE_READPACKET_TIMEOUT);
@@ -192,18 +194,40 @@ void loop(void)
 
  if(action1 != action2)
   {
-    if (action1 == 5 )
-      line_following.go_forward(50);
+    if (action1 == 5 ) {
+      if (currentspeed == 0)
+        currentspeed = 10;
+      line_following.go_forward(currentspeed);
+    }
     if (action1 == 7)
-      line_following.line_following_turn_left(50);    
+      //line_following.line_following_turn_left(currentspeed);    
+      line_following.turn_left(currentspeed);    
     if (action1 == 8)
-      line_following.line_following_turn_right(50);
-    if (action1 == 1)
+      //line_following.line_following_turn_right(currentspeed);
+      line_following.turn_right(currentspeed);
+    if (action1 == 6 ) {
+      if (currentspeed == 0)
+        currentspeed = 10;
+      line_following.go_backward(currentspeed);
+    }
+      
+    if (action1 == 2)
+      if (currentspeed < 250) {
+        currentspeed = currentspeed + 25;
+      } 
+    if (action1 == 4)
+     if (currentspeed > 10) {
+        currentspeed = currentspeed - 25;
+      } 
+    if (action1 == 1) {
       line_following.move_stop();
+      currentspeed = 0;
+    }
     // if (action1 == 0)
     //   line_following.go_forward(50);  
   }
   action2=action1;  
+  //Serial.println(currentspeed);
 
 
 }
