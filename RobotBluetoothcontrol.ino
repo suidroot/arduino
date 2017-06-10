@@ -195,7 +195,11 @@ void loop(void)
   action2=action1;  
 }
 
-// ************** Packet Parser (packetParser.cpp) **************
+/* ************** Packet Parser (packetParser.cpp) **************
+ *
+ * from Adafruit_BluefruitLE_nRF51 libraries
+ * 
+ */
 
 #define PACKET_ACC_LEN                  (15)
 #define PACKET_GYRO_LEN                 (15)
